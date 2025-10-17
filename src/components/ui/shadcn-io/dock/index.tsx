@@ -26,6 +26,11 @@ const DEFAULT_MAGNIFICATION = 80;
 const DEFAULT_DISTANCE = 150;
 const DEFAULT_PANEL_HEIGHT = 64;
 
+type DockInjectedProps = {
+  width: MotionValue<number>;
+  isHovered: MotionValue<number>;
+};
+
 type DockProps = {
   children: React.ReactNode;
   className?: string;
@@ -41,10 +46,14 @@ type DockItemProps = {
 type DockLabelProps = {
   className?: string;
   children: React.ReactNode;
+  // injected by DockItem
+  isHovered?: MotionValue<number>;
 };
 type DockIconProps = {
   className?: string;
   children: React.ReactNode;
+  // injected by DockItem
+  width?: MotionValue<number>;
 };
 
 type DocContextType = {
@@ -157,22 +166,21 @@ function DockItem({ children, className }: DockItemProps) {
       aria-haspopup='true'
     >
       {Children.map(children, (child) =>
-        cloneElement(child as React.ReactElement<any>, { width, isHovered })
+
+        cloneElement(child as React.ReactElement<DockInjectedProps>, { width, isHovered })
       )}
     </motion.div>
   );
 }
 
-function DockLabel({ children, className, ...rest }: DockLabelProps) {
-  const restProps = rest as Record<string, unknown>;
-  const isHovered = restProps['isHovered'] as MotionValue<number>;
+function DockLabel({ children, className, isHovered }: DockLabelProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (!isHovered) return;
     const unsubscribe = isHovered.on('change', (latest) => {
       setIsVisible(latest === 1);
     });
-
     return () => unsubscribe();
   }, [isHovered]);
 
@@ -188,7 +196,7 @@ function DockLabel({ children, className, ...rest }: DockLabelProps) {
             'absolute -top-6 left-1/2 w-fit whitespace-pre rounded-md border border-gray-200 bg-gray-100 px-2 py-0.5 text-xs text-neutral-700 dark:border-neutral-900 dark:bg-neutral-800 dark:text-white',
             className
           )}
-          role='tooltip'
+          role="tooltip"
           style={{ x: '-50%' }}
         >
           {children}
@@ -198,21 +206,16 @@ function DockLabel({ children, className, ...rest }: DockLabelProps) {
   );
 }
 
-function DockIcon({ children, className, ...rest }: DockIconProps) {
-  const restProps = rest as Record<string, unknown>;
-  const width = restProps['width'] as MotionValue<number>;
-
-  const widthTransform = useTransform(width, (val) => val / 2);
+function DockIcon({ children, className, width }: DockIconProps) {
+  const widthTransform = useTransform(width ?? 0 as unknown as MotionValue<number>, (val) => val / 2);
 
   return (
-    <motion.div
-      style={{ width: widthTransform }}
-      className={cn('flex items-center justify-center', className)}
-    >
+    <motion.div style={{ width: widthTransform }} className={cn('flex items-center justify-center', className)}>
       {children}
     </motion.div>
   );
 }
+
 
 
 export { Dock, DockIcon, DockItem, DockLabel };
