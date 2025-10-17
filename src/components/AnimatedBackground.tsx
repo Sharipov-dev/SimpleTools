@@ -6,8 +6,9 @@ export function AnimatedBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    // Ensure the canvas is present and type it as non-null for TS
+    if (!canvasRef.current) return;
+    const canvas = canvasRef.current as HTMLCanvasElement;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -67,8 +68,8 @@ export function AnimatedBackground() {
     class GeometricLine {
       x1: number;
       y1: number;
-      x2: number;
-      y2: number;
+      x2: number = 0;
+      y2: number = 0;
       angle: number;
       length: number;
       rotationSpeed: number;
