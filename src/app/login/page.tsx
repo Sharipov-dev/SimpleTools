@@ -9,6 +9,7 @@ import { GridPattern } from '@/components/GridPattern';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {signIn} from '@/lib/supabaseService';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -135,12 +136,12 @@ export default function LoginPage() {
           {/* Sign Up Link */}
           <div className="mt-6 text-center text-sm text-zinc-400">
             Don&apos;t have an account?{' '}
-            <button
-              type="button"
+            <Link
+              href="/signup"
               className="text-white hover:underline font-medium"
             >
               Sign up
-            </button>
+            </Link>
           </div>
         </div>
 
