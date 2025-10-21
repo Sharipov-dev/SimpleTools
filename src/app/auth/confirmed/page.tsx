@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LayoutGrid, CheckCircle } from 'lucide-react';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
@@ -37,9 +36,6 @@ export default function ConfirmPage() {
             <LayoutGrid className="w-8 h-8 text-white" />
           </div>
           <p className="text-white mb-2">Welcome to Task Dashboard!</p>
-          <p className="text-zinc-500 text-sm">
-            Redirecting to login in {countdown} second{countdown !== 1 ? 's' : ''}...
-          </p>
         </div>
 
         <div className="mt-6 text-center">
