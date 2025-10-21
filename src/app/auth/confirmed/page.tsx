@@ -8,24 +8,7 @@ import { FloatingOrbs } from '@/components/FloatingOrbs';
 import { GridPattern } from '@/components/GridPattern';
 
 export default function ConfirmPage() {
-  const [countdown, setCountdown] = useState(3);
   const router = useRouter();
-
-  useEffect(() => {
-    // Countdown timer
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          router.push('/login');
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [router]);
 
   return (
     <main className="min-h-screen bg-black overflow-hidden flex items-center justify-center">
