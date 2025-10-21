@@ -1,4 +1,7 @@
 import { supabase } from './supabaseClient';
+
+const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirmed`;
+
 export async function signIn(email: string, password: string) {
     const {data, error} = await supabase.auth.signInWithPassword({
         email, password
@@ -9,7 +12,10 @@ export async function signIn(email: string, password: string) {
 export async function signUp(email: string, password: string) {
     const {data, error} = await supabase.auth.signUp({
         email,
-        password
+        password,
+        options: {
+            emailRedirectTo: redirectTo
+        }
     });
     if (error) throw error;
     return data;
